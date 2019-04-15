@@ -1,0 +1,201 @@
+<p-growl [(value)]="messages" [life]="3000" [sticky]="false"></p-growl>
+
+
+<div class="container">
+    <div class="row">
+        <div class="">
+            <div class="panel-body">
+                <form [formGroup]="addOrUpdateProjectDetailForm" (ngSubmit)="addUpdateProjectSubmit()" novalidate>
+                    <div class="row">
+                        <div class="col-md-3"> </div>
+                        <div class="form-group col-md-6">
+                            <label class="control-label col-sm-4" for="projectName">Project:</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" id="projectName" placeholder="Project Name" name="projectNameControl" formControlName="projectNameControl">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div *ngIf="(addOrUpdateProjectDetailForm.controls.projectNameControl.touched && !addOrUpdateProjectDetailForm.controls.projectNameControl.valid)">
+                                <span class="glyphicon glyphicon-info-sign error-message" aria-hidden="true" style="display:inline;"></span>
+                                <p class="error-message" style="display:inline;">Project name is required</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3"></div>
+                        <div class="form-group col-md-6">
+                            <label class="control-label col-sm-4">Priority:</label>
+                            <div class="col-sm-8">
+                                <div class="row">
+                                    <div class="col-sm-1">
+                                        <h5 class="padding-pixel">0</h5>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="padding-middle"></div>
+                                        <p-slider formControlName="priorityControl" [min]="0" [max]="30" [step]="1" [style]="{'width':'140px'}"></p-slider>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <h5 class="padding-pixel">30</h5>
+                                    </div>
+                                    <div class="col-sm-1"> </div>
+                                    <div class="col-sm-3">
+                                        <input class="form-control" readonly name="priorityDisplayControl" formControlName="priorityDisplayControl" value="{{addOrUpdateProjectDetailForm.controls.priorityControl.value}}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div *ngIf="(addOrUpdateProjectDetailForm.controls.priorityControl.touched && !addOrUpdateProjectDetailForm.controls.priorityControl.valid)">
+                                <span class="glyphicon glyphicon-info-sign error-message" aria-hidden="true" style="display:inline;"></span>
+                                <p class="error-message" style="display:inline;">This is a required field</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-6">
+                            <div class="checkbox checkbox-padding">
+                                <label>
+                                    <input type="checkbox" value="" name="checkDatesControl" formControlName="checkDatesControl">Set Start and End Date
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-3"> </div>
+                    </div>
+                    <div class="row" *ngIf="addOrUpdateProjectDetailForm.controls.checkDatesControl.value">
+                        <div class="col-md-3"></div>
+                        <div class="form-group col-md-6">
+                            <label class="control-label col-sm-4" for="endDate">Start Date:</label>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <p-calendar name="startDateControl" formControlName="startDateControl" [showIcon]="true"></p-calendar>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3"></div>
+                    </div>
+                    <div class="row" *ngIf="addOrUpdateProjectDetailForm.controls.checkDatesControl.value">
+                        <div class="col-md-3"></div>
+                        <div class="form-group col-md-6">
+                            <label class="control-label col-sm-4" for="endDate">End Date:</label>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <p-calendar name="endDateControl" formControlName="endDateControl" [showIcon]="true"></p-calendar>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-3"></div>
+                        <div class="form-group col-md-6">
+                            <label class="control-label col-sm-4">Manager:</label>
+                            <div class="col-sm-6">
+                                <input class="form-control" placeholder="Select Manager" readonly name="selectedManager" formControlName="selectedManagerName">
+                            </div>
+                            <div class="col-sm-1">
+                                <button type="button" class="btn btn-info sbutton" data-toggle="modal" data-target="#usersModal">Search</button>
+                            </div>
+                        </div>
+                        <div class="col-md-3"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3"></div>
+                        <div class="form-group col-md-6">
+                            <div class="col-md-4"></div>
+                            <div class="col-md-8">
+                                <button type="submit" class="btn btn-primary sbutton" [disabled]="addOrUpdateProjectDetailForm.invalid" [ngClass]="{
+                                    'btn-primary sbutton': addOrUpdateBtn == 'Add',
+                                    'btn-secondary sbutton': addOrUpdateBtn == 'Update'
+                                }">{{addOrUpdateBtn}} Project</button>
+                                <button type="button" class="btn btn-primary sbutton" (click)="addProjectReset()">Cancel</button>
+                            </div>
+                        </div>
+                        <div class="col-md-3"></div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="">
+            <div class="panel-heading">
+                <h3 class="panel-title">View Project</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <p-dataTable [value]="projectsList">
+                            <p-column field="Name" header="Project Name" sortable="true" [filter]="true" filterMatchMode="contains"></p-column>
+                            <p-column field="StartDate" header="Start Date" sortable="true" [filter]="true" filterMatchMode="contains">
+
+                                <ng-template let-col let-project="rowData" let-ri="rowIndex" pTemplate="body">
+                                    <span>{{project[col.field]|date:'dd/MM/yyyy'}}</span>
+                                </ng-template>
+                            </p-column>
+                            <p-column field="EndDate" header="End Date" sortable="true" [filter]="true" filterMatchMode="contains">
+                                <ng-template let-col let-project="rowData" let-ri="rowIndex" pTemplate="body">
+                                    <span>{{project[col.field]|date:'dd/MM/yyyy'}}</span>
+                                </ng-template>
+                            </p-column>
+                            <p-column field="priority" header="Priority" sortable="true" [filter]="true" filterMatchMode="contains"></p-column>
+                            <p-column field="numberOfTask" header="No.of Tasks" ></p-column>
+    
+                            <p-column header="Actions">
+                                <ng-template let-project="rowData" pTemplate="body">
+                                    <button type="button" class="btn btn-primary btn-sm newButton" (click)="updateProject(project)">Update</button>
+                                    <button type="button" class="btn btn-primary btn-sm newButton" (click)="suspendProject(project)">Suspend </button>
+                                </ng-template>
+                            </p-column>
+                        </p-dataTable>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Search Users popup -->
+<div id="usersModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">User List</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-10">
+                        <p-dataTable [value]="userList">
+                            <p-column field="Id" hidden="hidden" header="User ID" sortable="true" [filter]="true" filterMatchMode="contains"></p-column>
+                            <p-column field="firstName" header="First Name" sortable="true" [filter]="true" filterMatchMode="contains"></p-column>
+                            <p-column field="lastName" header="Last Name" sortable="true" [filter]="true" filterMatchMode="contains"></p-column>
+                            <p-column field="employeeId" header="Employee ID" sortable="true" [filter]="true" filterMatchMode="contains"></p-column>
+                            <p-column header="Action">
+                                <ng-template let-user="rowData" pTemplate="body">
+                                    <button type="button" class="btn btn-primary btn-sm newButton" id="assignManager" (click)="assignManager(user.Id, user.firstName + ' ' + user.lastName)"
+                                        data-dismiss="modal">Select</button>
+                                </ng-template>
+                            </p-column>
+                        </p-dataTable>
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+                <br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<p-confirmDialog header="Confirmation" icon="fa fa-question-circle" width="425" #cd></p-confirmDialog>

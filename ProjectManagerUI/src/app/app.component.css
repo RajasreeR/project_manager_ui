@@ -1,0 +1,31 @@
+.error {
+    font-size: 13px;
+    color: #c7254e;
+    background: #f9f2f4;
+    border-radius: 3px;
+    padding: 15px;
+    margin: -26px 0 15px;
+   font-family:  "Roboto", sans-serif
+  }
+
+  .navbar-brand
+  {
+    color: #fff;
+  }
+
+ .navbar-inverse .navbar-nav>li>a
+  {
+    color: white;
+  }
+
+.headerBar {
+    background-color: #628055;
+ }
+ .navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:focus, .navbar-inverse .navbar-nav>.active>a:hover{
+  background-color: #103a12 !important;
+ }
+ .ui-datatable th.ui-state-default{
+   background-color: #387896 !important;
+ }
+
+

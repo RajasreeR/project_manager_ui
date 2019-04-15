@@ -1,0 +1,23 @@
+ /* You can add global styles to this file, and also import other style files */
+ .ui-datatable th.ui-state-default {
+    background: rgb(181, 205, 221) !important;
+    border-color: #d9d9d9;
+} 
+.ui-datatable th.ui-state-active{
+    color:rgb(41, 40, 40) !important;
+}
+.row-centered {
+    text-align: center;
+}
+.row-right {
+    text-align: right;
+}
+.newButton{
+
+    background-color: rgb(91, 157, 238);
+    color: black;
+}
+.sbutton {
+    background-color: rgb(53, 105, 57);
+    color: black;
+}

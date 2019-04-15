@@ -1,0 +1,21 @@
+.row-right {
+    text-align: right;
+    padding-right: 2%;
+}
+.error-message {
+    color: red;
+}
+.checkbox-padding {
+    padding-left: 5px;
+}
+.sbutton {
+    background-color: rgb(53, 105, 57);
+    color: black;
+}
+.padding-middle {
+    padding-top: 5%;
+}
+.padding-pixel {
+    height: 20px;
+}
+

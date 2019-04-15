@@ -1,0 +1,15 @@
+.row-right {
+    text-align: right;
+    padding-right: 2%;
+}
+.sbutton {
+    background-color: rgb(53, 105, 57);
+    color: black;
+}
+.checkbox-padding {
+    padding-left: 5px;
+}
+.ui-datatable th.ui-state-default{
+    background-color: #387896 !important;
+  }
+

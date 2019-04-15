@@ -1,0 +1,22 @@
+<nav class="navbar navbar-inverse navbar-static-top">
+  <div class="container-fluid headerBar">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">{{title}}</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li [routerLinkActive]="['active']" class="nav-item">
+        <a routerLink="/adduser" class="nav-link">Add User</a>
+      </li>
+      <li [routerLinkActive]="['active']">
+        <a routerLink="/addproject" class="nav-link">Add Project</a>
+      </li>
+      <li [routerLinkActive]="['active']" class="nav-item">
+          <a routerLink="/addtask" class="nav-link">Add Task</a>
+        </li>
+      <li [routerLinkActive]="['active']" class="nav-item">
+        <a routerLink="/viewtask" class="nav-link">View Task</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<router-outlet></router-outlet>

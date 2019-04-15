@@ -1,0 +1,250 @@
+<p-growl [(value)]="messages" [life]="3000" [sticky]="false"></p-growl>
+
+<!-- UserDetail popup -->
+<div id="userDetailsModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Search User</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <p-dataTable [value]="usersList">
+                            <p-column field="Id" hidden="hidden" header="User ID" sortable="true" [filter]="true" filterMatchMode="contains"></p-column>
+                            <p-column field="firstName" header="First Name" sortable="true" [filter]="true" filterMatchMode="contains"></p-column>
+                            <p-column field="lastName" header="Last Name" sortable="true" [filter]="true" filterMatchMode="contains"></p-column>
+                            <p-column field="employeeId" header="Employee ID" sortable="true" [filter]="true" filterMatchMode="contains"></p-column>
+                            <p-column field="projectId" header="Project ID" sortable="true" [filter]="true" filterMatchMode="contains"></p-column>
+                          
+                            <p-column>
+                                <ng-template let-user="rowData" pTemplate="body">
+                                    <button type="button" class="btn btn-primary btn-sm newButton" id="assignUser" (click)="assignUser(user.userId, user.firstName + ' ' + user.lastName)" data-dismiss="modal">Select</button>
+                                </ng-template>
+                            </p-column>
+                        </p-dataTable>
+                    </div>
+                </div>
+                <br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Parent tasks popup -->
+<div id="parentTasksModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Search Parent Task</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <p-dataTable [value]="parentTasksList">
+                            <p-column field="parentTaskId" hidden="hidden" header="Parent ID" sortable="true" [filter]="true" filterMatchMode="contains"></p-column>
+                            <p-column field="parentTaskName" header="Parent Task Name" sortable="true" [filter]="true" filterMatchMode="contains"></p-column>
+                            <p-column>
+                                <ng-template let-pTask="rowData" pTemplate="body">
+                                    <div align="center">
+                                        <button type="button" class="btn btn-primary btn-sm newButton" id="assignProject" (click)="selectPTask(pTask.parentTaskId, pTask.parentTaskName)"
+                                            data-dismiss="modal">Select</button>
+                                    </div>
+                                </ng-template>
+                            </p-column>
+                        </p-dataTable>
+                    </div>
+                </div>
+                <br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="">
+            <div class="panel-body">
+                <form [formGroup]="addTaskForm" (ngSubmit)="addTaskSubmit()" novalidate>
+                <div class="row">
+                        <div class="col-md-3"> </div>
+                    <div class="form-group col-md-6">
+                        <label class="control-label col-sm-4" for="project">Project:</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="project" placeholder="Select the Project" readonly value="{{selectedProject}}" formControlName="ProjectIdControl">
+                        </div>
+                        <div class="col-sm-2">
+                            <button type="button" class="btn btn-info sbutton" data-toggle="modal" [disabled]="formMode === 'Edit Task'" data-target="#projectDetailsModal">Search</button>
+                        </div>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+                <div class="row">
+                        <div class="col-md-3"> </div>
+                    <div class="form-group col-md-6">
+                        <label class="control-label col-sm-4" for="task">Task:</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="task" placeholder="Enter task name" formControlName="TaskNameControl">
+                        </div>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6">
+                        <div class="checkbox checkbox-padding">
+                            <label>
+                                <input type="checkbox" value="" name="IsParentTaskControl" (change)="handleChange($event)" formControlName="IsParentTaskControl">Parent Task</label>
+                        </div>
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+           
+
+                <div class="row" *ngIf="addTaskForm.controls.IsParentTaskControl.value !== true">
+                        <div class="col-md-3"> </div>
+                    <div class="form-group col-md-6">
+                        <label class="control-label col-sm-4">Priority:</label>
+                        <div class="col-sm-8">
+                            <div class="row">
+                                <div class="col-sm-1">
+                                    <h5 class="padding-pixel">0</h5>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="padding-middle"></div>
+                                    <p-slider formControlName="PriorityControl" [min]="0" [max]="30" [step]="1" [style]="{'width':'140px'}"></p-slider>
+                                </div>
+                                <div class="col-sm-1">
+                                    <h5 class="padding-pixel">30</h5>
+                                </div>
+                                <div class="col-sm-1"> </div>
+                                <div class="col-sm-3">
+                                    <input class="form-control" readonly formControlName="PriorityDisplayControl"  value="{{addTaskForm.controls.PriorityControl.value}}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                    </div>
+                </div>
+                <div class="row"  *ngIf="addTaskForm.controls.IsParentTaskControl.value !== true">
+                        <div class="col-md-3"> </div>
+                    <div class="form-group col-md-6">
+                        <label class="control-label col-sm-4" for="pTask">Parent Task:</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="pTask" placeholder="Select the Parent Task" readonly  value="{{selectedTask}}" formControlName="ParentTaskControl">
+                        </div>
+                        <div class="col-sm-2">
+                            <button type="button" class="btn btn-info sbutton" data-toggle="modal" data-target="#parentTasksModal">Search</button>
+                        </div>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+                <div class="row" *ngIf="addTaskForm.controls.IsParentTaskControl.value !== true">
+                        <div class="col-md-3"> </div>
+                    <div class="form-group col-md-6">
+                        <label class="control-label col-sm-4" for="startDate">Start Date:</label>
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                    <p-calendar  name="StartDateControl" formControlName="StartDateControl"   [showIcon]="true"></p-calendar>
+                           
+                            </div>
+                        </div>
+                    </div>
+                    </div> <div class="row" *ngIf="addTaskForm.controls.IsParentTaskControl.value !== true"> 
+                            <div class="col-md-3"> </div>
+                    <div class="form-group col-md-6">
+                            <label class="control-label col-sm-4" for="endDate">End Date:</label>
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                    <p-calendar  name="EndDateControl" formControlName="EndDateControl"   [showIcon]="true"></p-calendar>
+                           
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row" *ngIf="addTaskForm.controls.IsParentTaskControl.value !== true">
+                        <div class="col-md-3"> </div>
+                    <div class="form-group col-md-6">
+                        <label class="control-label col-sm-4" for="user">User:</label>
+                        <div class="col-sm-6">
+                            <input class="form-control" id="user" placeholder="Select a user" readonly  value="{{selectedUser}}" formControlName="UserIdControl">
+                        </div>
+                        <div class="col-sm-2">
+                            <button type="button" class="btn btn-info sbutton" data-toggle="modal" data-target="#userDetailsModal">Search</button>
+                        </div>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+                <div class="row">
+                        <div class="col-md-3"> </div>
+                    <div class="form-group col-md-6">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-8">
+                            <button type="submit" [disabled]="addTaskForm.invalid" class="btn btn-primary sbutton">{{btnMode}} Task</button>
+                            <button type="button" (click)="resetFields()"  class="btn btn-primary sbutton">Cancel</button>
+                        </div>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Project details popup -->
+<div id="projectDetailsModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Search Project</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <p-dataTable [value]="projectsList">
+                            <p-column field="projectId" header="Project ID" sortable="true" [filter]="true" filterMatchMode="contains"></p-column>
+                            <p-column field="Name" header="Project Name" sortable="true" [filter]="true" filterMatchMode="contains"></p-column>
+                            <p-column field="StartDate" header="Start Date" sortable="true" [filter]="true" filterMatchMode="contains"> <ng-template let-col let-project="rowData" let-ri="rowIndex" pTemplate="body">
+                                <span>{{project[col.field]|date:'dd/MM/yyyy'}}</span>
+                            </ng-template></p-column>
+                            <p-column field="EndDate" header="End Date" sortable="true" [filter]="true" filterMatchMode="contains"> <ng-template let-col let-project="rowData" let-ri="rowIndex" pTemplate="body">
+                                <span>{{project[col.field]|date:'dd/MM/yyyy'}}</span>
+                            </ng-template></p-column>
+                            <p-column field="priority" header="Priority" sortable="true" [filter]="true" filterMatchMode="contains"></p-column>
+                            <p-column field="managerName" header="Manager" sortable="true" [filter]="true" filterMatchMode="contains"></p-column>                            
+                            <p-column>
+                                <ng-template let-project="rowData" pTemplate="body">
+                                    <div align="center">
+                                        <button type="button" class="btn btn-primary btn-sm newButton" id="assignProject" (click)="selectProject(project.Name, project.projectId)" data-dismiss="modal">Select</button>
+                                    </div>
+                                </ng-template>
+                            </p-column>
+                        </p-dataTable>
+                    </div>
+                </div>
+                <br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,20 @@
+import { TestBed, async, inject } from '@angular/core/testing';
+
+import { UserService } from './user.service';
+import { HttpClientModule } from '@angular/common/http';
+
+describe('UserService', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [UserService],
+      imports:[HttpClientModule]
+    });
+  });
+
+  it('should be created', inject([UserService], (service: UserService) => {
+    expect(service).toBeTruthy();
+  }));
+  it('get all users should return real value', async(inject([UserService], (service: UserService) => {
+    expect(service.getUsers()).toBeTruthy();
+  })));
+});

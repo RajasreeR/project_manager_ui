@@ -1,0 +1,11 @@
+.error {
+    font-size: 10px;
+    color: #7c170f;
+    margin-left: 12px;
+    margin-bottom: 12px;
+  }
+  .sbutton {
+    background-color: rgb(53, 105, 57);
+    color: black;
+}
+
